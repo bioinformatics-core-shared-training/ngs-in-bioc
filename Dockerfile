@@ -11,3 +11,6 @@ RUN wget https://www.dropbox.com/s/ve6o68hkbthe3lo/exampleData.zip
 RUN unzip exampleData.zip
 RUN R -f installBioCPkgs.R
 RUN rm -r images javascripts stylesheets params.json index.html exampleData.zip
+RUN mkdir Practicals/exampleData
+RUN mv exampleData/* Practicals/exampleData
+RUN rm -r exampleData/
