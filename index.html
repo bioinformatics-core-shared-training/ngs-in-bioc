@@ -34,7 +34,8 @@
           <h3>
         <a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description.</h3>
 
-        <p></p>
+        <p>This course provides an introduction to the tools available through the <a href="www.bioconductor.org">Bioconductor</a></a> project for manipulating and analysing high-throughput sequencing (HTS) data. We will present workflows for the analysis of ChIP-Seq and RNA-seq data starting from aligned reads in bam format. We will also describe the various resources available through Bioconductor to annotate and visualize HTS data, which can be applied to any type of sequencing experiment. 
+        </p>
         <h3>
         <a id="authors" class="anchor" href="#authors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors.</h3>
         <p>
@@ -48,8 +49,17 @@
         
         <h3>
         <a id="software" class="anchor" href="#software" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to Run the course.</h3>
+        We recommend using <a href="www.rstudio.com">RStudio</a> for the practicals  
         <p>
-        Download the materials from this repository and <a href="installBioCPkgs.R">install</a> the required R and Bioconductor packages
+        Download the materials from this repository and install the required R and Bioconductor packages from within RStudio. This may take several minutes.
+        
+        <pre class="input"><code>source("http://www.bioconductor.org/biocLite.R")
+        biocLite(c("Biostrings", "ShortRead", "DESeq", "edgeR","biomaRt", "BSgenome",
+        "BSgenome.Dmelanogaster.UCSC.dm3", "org.Dm.eg.db",
+        "TxDb.Dmelanogaster.UCSC.dm3.ensGene", "pasillaBamSubset", "pasilla",
+        "rtracklayer", "ggbio", "vsn","gplots","RColorBrewer","chipseq","htSeqTools","limma","NBPSeq","tweeDEseqCountData","org.Hs.eg.db","Rcade", "exomeCopy","CNAnorm", "ChIPQC","TxDb.Hsapiens.UCSC.hg19.knownGene","BSgenome.Hsapiens.UCSC.hg19"))
+        </code></pre>
+        
         </p>
 
       <h3>
@@ -57,7 +67,9 @@
        <p>
          
          <pre class="input"><code>docker run -p 8787:8787 markdunning/ngs-in-bioc</code></pre>
-
+         Then load your web browser of choice and enter the address  
+         <pre class="input"><code>http://localhost:8787</code></pre>
+          This will allow you to use RStudio in your web browser
        </p>
             
 
