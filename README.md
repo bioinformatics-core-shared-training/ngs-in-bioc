@@ -1,9 +1,10 @@
 # ngs-in-bioc
 A 3-day course on Analysing Next Generation (/High Throughput etc..) Sequencing data using Bioconductor
 
-See the R script for which packages are required
+If you want to run the course, you will need data and a particular set of R packages. See the webpage for details;
 
-An exampleData folder is required for the practicals. This can be downloaded from
+http://bioinformatics-core-shared-training.github.io/ngs-in-bioc/
 
-https://app.box.com/s/ntjkjn3vb4jkvy6kq664
+#License
 
+This work is licensed under the Creative Commons Attribution-ShareAlike 2.0 UK: England & Wales License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/2.0/uk/ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
