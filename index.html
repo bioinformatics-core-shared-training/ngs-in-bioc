@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Ngs-in-bioc by bioinformatics-core-shared-training</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Ngs-in-bioc</h1>
+          <h2>A course on Analysing Next Generation (/High Throughput etc..) Sequencing data using Bioconductor</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/bioinformatics-core-shared-training/ngs-in-bioc/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/bioinformatics-core-shared-training/ngs-in-bioc/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/bioinformatics-core-shared-training/ngs-in-bioc" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h3>
+        <a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description.</h3>
+
+        <p>This course provides an introduction to the tools available through the <a href="www.bioconductor.org">Bioconductor</a></a> project for manipulating and analysing high-throughput sequencing (HTS) data. We will present workflows for the analysis of ChIP-Seq and RNA-seq data starting from aligned reads in bam format. We will also describe the various resources available through Bioconductor to annotate and visualize HTS data, which can be applied to any type of sequencing experiment. 
+        </p>
+        <h3>
+        <a id="authors" class="anchor" href="#authors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors.</h3>
+        <p>
+          <li><a href="https://github.com/ThomasCarroll">Thomas Carroll</a></li>
+          <li><a href="https://github.com/markdunning">Mark Dunning</a></li>
+          <li>Suraj Menon</li>
+          <li>Bernard Pereira</li>
+          <li>Oscar Rueda</li>
+          <li>Roslin Russell</li>
+          <li>Shamith Samarajiwa</li>
+        </p>
+        
+        <h3>
+        <a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prerequisites.</h3>
+        <p>
+          <li>A knowledge of current sequencing technologies, data formats (e.g. fastq and bam) and alignment </li>
+          <li>A very basic knowledge of UNIX would be an advantage, but nothing will be assumed and extremely little will be required </li>
+          <li>Attendees should be comfortable with using the R statistical language to read and manipulate data, and produce simple graphs</li>
+        </p>
+        
+        <h3>
+        <a id="aims" class="anchor" href="#aims" aria-hidden="true"><span class="octicon octicon-link"></span></a>Aims.</h3>
+        <p>
+          <li>To provide an understanding of how aligned sequencing reads, genome sequences and genomic regions are represented in R. </li>
+          <li>To encourage confidence in reading sequencing reads into R, performing quality assessment and executing standard pipelines for RNA-Seq and ChIP-Seq analysis </li>
+        </p>
+        
+
+        <h3>
+        <a id="objectives" class="anchor" href="#objectives" aria-hidden="true"><span class="octicon octicon-link"></span></a>Objectives.</h3>
+        <p>
+        <li>Know what tools are available in Bioconductor for HTS analysis and understand the basic object-types that are utilised. </li>
+        <li>Given a set of gene identifiers, find out whereabouts in the genome they are located, and vice-versa (i.e. go from genomic coordinates to genes). </li>
+        <li>Produce a list of differentially expressed genes from an RNA-Seq experiment. </li>
+        <li>Import a set of ChIP-Seq peaks and investigate their biological context.</li>
+        </p>
+
+
+        <h3>
+        <a id="software" class="anchor" href="#software" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to Run the course.</h3>
+        We recommend using <a href="www.rstudio.com">RStudio</a> for the practicals  
+        <p>
+        Download the materials from this repository and install the required R and Bioconductor packages from within RStudio. This may take several minutes.
+        
+        <pre class="input"><code>source("http://www.bioconductor.org/biocLite.R")
+        biocLite(c("Biostrings", "ShortRead", "DESeq", "edgeR","biomaRt", "BSgenome",
+        "BSgenome.Dmelanogaster.UCSC.dm6", "org.Dm.eg.db",
+        "TxDb.Dmelanogaster.UCSC.dm3.ensGene", "pasillaBamSubset", "pasilla",
+        "rtracklayer", "ggbio", "vsn","gplots","RColorBrewer","chipseq","htSeqTools","limma","NBPSeq","tweeDEseqCountData","org.Hs.eg.db","Rcade", "exomeCopy","CNAnorm", "ChIPQC","TxDb.Hsapiens.UCSC.hg19.knownGene","BSgenome.Hsapiens.UCSC.hg19", "ChIPpeakAnno","statmod","locfit"))
+        </code></pre>
+        
+        </p>
+
+      <h3>
+        <a id="docker" class="anchor" href="#docker" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using Docker.</h3>
+       <p>
+         
+         <pre class="input"><code>docker run -p 8787:8787 markdunning/ngs-in-bioc</code></pre>
+         Then load your web browser of choice and enter the address  
+         <pre class="input"><code>http://localhost:8787</code></pre>
+          This will allow you to use RStudio in your web browser with the username and password 'rstudio'
+       </p>
+            
+
+ 
+        </p>
+        
+        <h3>
+        <a id="data" class="anchor" href="#data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example Data.</h3>
+        <p>
+        An exampleData folder is required to run the practicals sucessfully. This folder can be downloaded from <a href="https://www.dropbox.com/s/ve6o68hkbthe3lo/exampleData.zip">Dropbox.</a> Once downloaded and unzipped, the folder should be placed inside the Practicals directory
+        
+        </p>
+        
+        <p>
+        A breast cancer dataset is also required for the Bioconductor introductory practical. This folder can be downloaded from <a href="https://www.dropbox.com/s/82p2dcwwo3qnf21/nki.zip">Dropbox.</a> Once downloaded and unzipped, the folder should be placed inside the Practicals directory
+        
+        </p>
+        
+        
+        
+  <h3>
+  <a id="day1" class="anchor" href="#day1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Day One.</h3>
+  <p>
+
+  <li><a href="Lectures/Lect1_ngs-intro.html">Introduction to NGS Sequencing (L)</a></li>
+  <li><a href="Practicals/1.bioc-intro.pdf">R and Bioconductor recap (P)</li>
+  <li><a href="Lectures/Lect2-StringsAndRanges.pdf">Representing Sequencing data in Bioconductor (L) </a></li>
+  <li><a href="Practicals/2.StringsAndRanges-Prac.pdf">Representing Sequencing data in Bioconductor (P)</a></li>
+  <li><a href="Lectures/Lect3-DesignStatistics_HTSeq.pdf">Linear Models and Experimental Design (L)</a></li>
+</p>
+
+
+  <h3>
+  <a id="day1" class="anchor" href="#day2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Day Two.</h3>
+  <p>
+  <li><a href="Lectures/Lect4_RNAseq_Sept2014.pdf">Introduction to RNA Sequencing</a></li>
+  <li><a href="Practicals/3.RNAseq-practical.pdf">RNA-seq Practical</a></li>
+  <li><a href="Lectures/Lect5a_Introduction_to_Annotation.pdf">Introduction to Genome Annotation</a></li>
+  <li><a href="Lectures/Lect5b_GenomeAnnotation.pdf">Genome Annotation in Bioconductor</a></li>
+  <li><a href="Practicals/4.Annotation-and-Visualisation.pdf">Genome Annotation Practical</a></li>
+</p>
+
+
+  <h3>
+  <a id="day1" class="anchor" href="#day3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Day Three.</h3>
+  <p>
+     <li><a href="Lectures/Lect6a_ChIP-Seq_Data_Analysis.pdf">Introduction to ChIP-Seq</a></li>
+     <li><a href="Lectures/Lect6b_ChIP-Seq Data Analysis.pdf">Analysis of ChIP-Seq</a></li>
+     <li><a href="Practicals/ChIP-Seq_Practical_1.pdf">ChIP-Seq Practical 1</a></li>
+     <li><a href="Lectures/Lect6c_ChIP-Seq DifferentialBinding.pdf">Differential Binding</a></li>
+     <li><a href="Practicals/ChIP-Seq_Practical_2.pdf">ChIP-Seq Practical 2</a></li>
+     <li><a href="Practicals/ChIP-Seq_Practical_3.pdf">ChIP-Seq Practical 3</a></li>
+  </p>
+
+        </section>
+
+        <footer>
+          Ngs-in-bioc is maintained by <a href="https://github.com/bioinformatics-core-shared-training">bioinformatics-core-shared-training</a><br>
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
