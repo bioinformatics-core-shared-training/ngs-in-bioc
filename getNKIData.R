@@ -1,0 +1,7 @@
+library(Biobase)
+library(breastCancerNKI)
+data(nki)
+dir.create("Practicals/nki")
+write.table(exprs(nki), file="Practicals/nki/NKI.exprs.txt",sep="\t",quote=FALSE)
+write.table(pData(nki), file="Practicals/nki/NKI.pData.txt",sep="\t",quote=FALSE)
+write.table(fData(nki), file="Practicals/nki/NKI.fData.txt",sep="\t",quote=FALSE)
