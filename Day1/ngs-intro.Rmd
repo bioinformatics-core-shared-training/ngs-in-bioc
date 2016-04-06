@@ -1,0 +1,638 @@
+---
+title: "Introduction to NGS data"
+author: "Mark Dunning"
+date: '`r format(Sys.time(), "Last modified: %d %b %Y")`'
+output: slidy_presentation
+---
+
+# Course Introduction
+
+
+## About the Course
+
+- We will tell about '*best practice*' tools that we use in daily work as Bioinformaticians
+- You will (probably) not come away being an expert
+- We cannot teach you everything about NGS data
+    + plus, it is a fast-moving field
+- RNA and ChIP only
+    + much of the initial processing is the same for other assays
+- However, we hope that you will
+    + Understand how your data are processed
+    + Increase confidence with R and Bioconductor
+    + Be able to explore new technologies, methods, tools as they come out
+
+## Further disclaimer
+
+![fisher](../images/fisher.jpg)
+
+> To consult the statistician after an experiment is finished is often merely to ask him to conduct a post mortem examination. He can perhaps say what the experiment died of.”. R.A. Fisher, 1938
+
+If you haven't designed your experiment properly, then all the Bioinformatics we teach you won't help: Consult with your local statistician - preferably **not the day before your grant is due!!!!**
+
+<iframe width="420" height="315" src="https://www.youtube.com/embed/Hz1fyhVOjr4" frameborder="0" allowfullscreen></iframe>
+
+- We have some [materials](http://bioinformatics-core-shared-training.github.io/experimental-design/) you can look at
+
+
+# Course Outline
+
+## Day 1
+
+- Recap of R
+- Data structures for NGS analysis in R
+- Theory of Linear Models
+
+## Day 2
+
+
+- Statistical theory behind RNA-seq analysis
+- Differential Expression
+- Annotating RNA-seq results
+
+
+## Day 3
+
+- ChIP-seq Quality assessment
+- Analysis of ChIP-seq
+
+
+
+# Historical context
+
+## Cast your minds back a few years..
+
+![array-summary](../images/array-summary.png)
+
+## Plenty of success stories with microarrays
+
+![array-achievements](../images/array-achievements.png)
+
+## What did we learn from arrays?
+
+- Experimental Design; despite this fancy new technolgy, if we don't design the experiments properly we won't get meaningful conclusions
+- Quality assessment; Yes, NGS experiments can still go wrong!
+- Normalisation; NGS data come with their own set of biases and error that need to be accounted for
+- Stats; testing for RNA-seq is built-upon the knowledge from microarrays
+- Plenty of tools and workflows were established.
+- ***Don't forget about arrays; the data are all out there somewhere waiting to be discovered and explored***
+
+## Reproducibility is key
+
+![duke-scandal](../images/rep-research-nyt.png)
+
+Two Biostatiscians (later termed '*Forensic Bioinformaticians*') from M.D. Anderson used R extensively during their re-analysis and investigation of a Clinical Prognostication paper from Duke. The subsequent [scandal](https://www.youtube.com/watch?v=W5sZTNPMQRM) put Reproducible Research on the map.
+
+Keith Baggerly's talk from Cambridge in 2010 is highy-recommended.
+
+<iframe width="420" height="315" src="https://www.youtube.com/embed/7gYIs7uYbMo" frameborder="0" allowfullscreen></iframe>
+
+
+# Why do sequencing?
+
+##Microarrays vs sequencing
+
+- Probe design issues with microarrays
+    + *'Dorian Gray effect'* http://www.biomedcentral.com/1471-2105/5/111
+    + ' ...mappings are frozen, as a Dorian Gray-like syndrome: the apparent eternal youth of the mapping does not reflect that somewhere the 'picture of it' decays'
+- Sequencing data are 'future proof'
+    + if a new genome version comes along, just re-align the data!
+    + can grab published-data from public repositories and re-align to **your** own choice of genome / transcripts and aligner
+- Limited number of novel findings from microarays
+    + can't find what you're not looking for!
+- Genome coverage
+    + some areas of genome are problematic to design probes for
+- Maturity of analysis techniques
+    + on the other hand, analysis methods and workflows for microarrays are well-established
+    + until recently...
+    
+## The cost of sequencing
+
+![costs](../images/seq-costs.png)
+
+##Reports of the death of microarrays
+
+![microarray-dead](../images/microarray-dead.png)
+
+##Reports of the death of microarrays. Greatly exagerated?
+
+http://core-genomics.blogspot.co.uk/2014/08/seqc-kills-microarrays-not-quite.html
+
+![hadfield-blog](../images/hadfield-blog.png)
+
+
+
+# What are NGS data?
+
+## Illumina sequencing *
+
+- Employs a *'sequencing-by-synthesis'* approach
+
+<iframe width="420" height="315" src="https://www.youtube.com/embed/HMyCqWhwB8E" frameborder="0" allowfullscreen></iframe>
+
+http://www.illumina.com/content/dam/illumina-marketing/documents/products/illumina_sequencing_introduction.pdf
+
+\* Other sequencing technologies are available
+
+## Illumina sequencing
+
+![seq1](../images/illuminaSeq1.png)
+
+http://www.illumina.com/content/dam/illumina-marketing/documents/products/illumina_sequencing_introduction.pdf
+
+## Illumina sequencing
+
+![seq2](../images/illuminaSeq2.png)
+
+http://www.illumina.com/content/dam/illumina-marketing/documents/products/illumina_sequencing_introduction.pdf
+
+## Illumina sequencing
+
+![seq3](../images/illuminaSeq3.png)
+
+http://www.illumina.com/content/dam/illumina-marketing/documents/products/illumina_sequencing_introduction.pdf
+
+## Paired-end
+
+![seq4](../images/paired-end.png)
+
+
+## Multiplexing
+![seq5](../images/pooling.png)
+
+
+## Image processing 
+
+- Sequencing produces high-resolution TIFF ../images; not unlike microarray data
+- 100 tiles per lane, 8 lanes per flow cell, 100 cycles
+- 4 ../images (A,G,C,T) per tile per cycle = 320,000 ../images
+- Each *TIFF* image ~ 7Mb = 2,240,000 Mb of data (**2.24TB**)
+
+![cluster](../images/c6vllanxx_c001_l1_t001_bot_s1_a.jpg)
+
+## Image processing
+
+- Firecrest
+
+![firecrest](http://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Regulus_ignicapilla_Arundel.jpg/300px-Regulus_ignicapilla_Arundel.jpg)
+
+
+- *"Uses the raw TIF files to locate clusters on the image, and outputs the cluster intensity, X,Y positions, and an estimate of the noise for each cluster. The output from image analysis provides the input for base calling."*
+
+    + http://openwetware.org/wiki/BioMicroCenter:IlluminaDataPipeline
+- **You will never have to do this**
+    + In fact, the TIFF ../images are deleted by the instrument
+    
+## Base-calling
+
+- Bustard
+
+![bustard](http://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Ardeotis_kori_Etosha.JPG/300px-Ardeotis_kori_Etosha.JPG)
+
+- *"Uses cluster intensities and noise estimate to output the sequence of bases read from each cluster, along with a confidence level for each base."*
+    + http://openwetware.org/wiki/BioMicroCenter:IlluminaDataPipeline
+- **You will never have to do this**
+
+## Alignment
+
+- Locating where each generated sequence came from in the genome
+- Outside the scope of this course
+- *Usually* perfomed automatically by a sequencing service
+- For most of what follows in the course, we will assume alignment has been performed and we are dealing with aligned data
+    + Popular aligners
+    + bwa http://bio-bwa.sourceforge.net/
+    + bowtie http://bowtie-bio.sourceforge.net/index.shtml
+    + novoalign http://www.novocraft.com/products/novoalign/
+    + stampy http://www.well.ox.ac.uk/project-stampy
+    + many, many more.....
+
+
+
+# Data formats
+
+## Raw reads - fastq
+
+- The most basic file type you will see is *fastq*
+    + Data in public-repositories (e.g. Short Read Archive, GEO) tend to be in this format
+- This represents all sequences created after imaging process
+- Each sequence is described over 4 lines
+- No standard file extension. *.fq*, *.fastq*, *.sequence.txt*
+- Essentially they are text files
+    + Can be manipulated with standard unix tools; e.g. *cat*, *head*, *grep*, *more*, *less*
+- They can be compressed and appear as *.fq.gz*
+- Same format regardless of sequencing protocol (i.e. RNA-seq, ChIP-seq, DNA-seq etc)
+
+```
+@SEQ_ID
+GATTTGGGGTTCAAAGCAGTATCGATCAAATAGTAAATCCATTTGTTCAACTCACAGTTT
++
+!''*((((***+))%%%++)(%%%%).1***-+*''))**55CCF>>>>>>CCCCCCC65
+```
+~ 250 Million reads (sequences) per Hi-Seq lane
+
+## Fastq sequence names
+
+```
+@HWUSI-EAS100R:6:73:941:1973#0/1
+```
+
+- The name of the sequencer (HWUSI-EAS100R)
+- The flow cell lane (6)
+- Tile number with the lane (73)
+- x co-ordinate within the tile (941)
+- y co-ordinate within the tile (1973)
+- \#0 index number for a multiplexed sample 
+-  /1; the member of a pair, /1 or /2 (paired-end or mate-pair reads only)
+
+## Fastq quality scores
+
+```
+!''*((((***+))%%%++)(%%%%).1***-+*''))**55CCF>>>>>>CCCCCCC65
+```
+
+- Quality scores $$ Q = -10log_{10}p$$
+    + Q = 30, p=0.001
+    + Q = 20, p=0.01
+    + Q = 10, p=0.1
+- These numeric quanties are *encoded* as **ASCII** code
+    + Sometimes an offset is used before encoding
+
+## Fastq quality scores
+
+![phred](../images/phred.png)
+
+## Useful for quality control
+
+- FastQC, from Babraham Bioinformatics Core; http://www.bioinformatics.babraham.ac.uk/projects/fastqc/
+
+![fastqc](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc.png)
+
+
+- Based on these plots we may want to *trim* our data
+    + A popular choice is ***trimmomatic*** http://www.usadellab.org/cms/index.php?page=trimmomatic
+    + or ***Trim Galore!*** from the makers of FastQC
+
+## Aligned reads - sam
+
+- **S**equence **A**lignment/**M**ap (sam) http://samtools.github.io/hts-specs/SAMv1.pdf
+- *Header* lines followed by tab-delimited lines
+    + Header gives information about the alignment and references sequences used
+```
+@HD     VN:1.0  SO:coordinate
+@SQ     SN:chr1 LN:249250621
+@SQ     SN:chr10        LN:135534747
+@SQ     SN:chr11        LN:135006516
+```
+
+
+```
+HWI-ST1001:137:C12FPACXX:7:1115:14131:66670     0       chr1    12805   1       42M4I5M *
+0       0       TTGGATGCCCCTCCACACCCTCTTGATCTTCCCTGTGATGTCACCAATATG     
+CCCFFFFFHHGHHJJJJJHJJJJJJJJJJJJJJJJIJJJJJJJJJJJJIJJ     
+AS:i:-28        XN:i:0  XM:i:2  XO:i:1XG:i:4   NM:i:6  MD:Z:2C41C2     YT:Z:UU NH:i:3  
+CC:Z:chr15      CP:i:102518319  XS:A:+  HI:i:0
+
+```
+
+- http://homer.salk.edu/homer/basicTutorial/samfiles.html
+
+
+- Large size on disk; ~100s of Gb
+    + Can be manipulated with standard unix tools; e.g. *cat*, *head*, *grep*, *more*, *less*
+
+## Sam format - key columns
+
+```
+HWI-ST1001:137:C12FPACXX:7:1115:14131:66670     0       chr1    12805   1       42M4I5M *
+0       0       TTGGATGCCCCTCCACACCCTCTTGATCTTCCCTGTGATGTCACCAATATG     
+CCCFFFFFHHGHHJJJJJHJJJJJJJJJJJJJJJJIJJJJJJJJJJJJIJJ     
+AS:i:-28        XN:i:0  XM:i:2  XO:i:1XG:i:4   NM:i:6  MD:Z:2C41C2     YT:Z:UU NH:i:3  
+CC:Z:chr15      CP:i:102518319  XS:A:+  HI:i:0
+
+```
+
+![sam](../images/sam-format.png)
+
+- http://samtools.github.io/hts-specs/SAMv1.pdf
+    + Read name
+    + Chromosome
+    + Position
+    + Mapping quality
+    + etc...
+
+## Sam file flags
+
+- Represent useful QC information
+    + Read is unmapped
+    + Read is paired / unpaired
+    + Read failed QC
+    + Read is a PCR duplicate 
+- https://broadinstitute.github.io/picard/explain-flags.html
+
+![sam-flags](../images/sam-flags.png)
+
+## Aligned reads - bam
+
+- *Exactly* the same information as a sam file
+- ..except that it is *binary* version of sam
+- compressed around x4
+- Attempting to read will print garbage to the screen
+- bam files can be indexed
+    + Produces an index file with the same name as the bam file, but with **.bai** extension
+
+```
+samtools view mysequences.bam | head
+```
+
+- N.B The sequences can be extracted by various tools to give *fastq*
+
+## samtools flagstat
+
+- Useful *command-line* tool as part of **samtools**
+
+```
+$ samtools flagstat NA19914.chr22.bam
+2109857 + 0 in total (QC-passed reads + QC-failed reads)
+0 + 0 secondary
+0 + 0 supplimentary
+40096 + 0 duplicates
+2064356 + 0 mapped (97.84%:-nan%)
+2011540 + 0 paired in sequencing
+1005911 + 0 read1
+1005629 + 0 read2
+1903650 + 0 properly paired (94.64%:-nan%)
+1920538 + 0 with itself and mate mapped
+45501 + 0 singletons (2.26%:-nan%)
+5134 + 0 with mate mapped to a different chr
+4794 + 0 with mate mapped to a different chr (mapQ>=5)
+
+```
+
+## Post-processing of aligned files
+
+- Marking of PCR duplicates
+    + PCR amplification errors can cause some sequences to be over-represented
+    + Chances of any two sequences aligning to the same position are *unlikely*
+    + Caveat: obviously this depends on amount of the genome you are capturing
+    + Such reads are *marked* but not usually removed from the data
+    + Most downstream methods will ignore such reads
+    + Typically, [***picard***](http://broadinstitute.github.io/picard/) is used 
+- Sorting
+    + Reads can be sorted according to genomic position
+        + [***samtools***](http://www.htslib.org/)
+- Indexing
+    + Allow efficient access
+        + [***samtools***](http://www.htslib.org/)
+
+
+
+## Aligned files in IGV
+
+- Once our bam files have been *indexed* we can view them in IGV
+- This is **highly recommended**
+
+![igv](../images/igv_screenshot1.png)
+
+
+## Other misc. format
+
+Often said that Bioinformaticians love coming up with new file formats
+
+- Useful link : http://www.genome.ucsc.edu/FAQ/FAQformat.html
+- bed ; only first three columns are required
+```    
+track name=pairedReads description="Clone Paired Reads" useScore=1
+chr22 1000 5000 cloneA 960 + 1000 5000 0 2 567,488, 0,3512
+chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601 
+```
+- gff; (gene feature format)
+```
+track name=regulatory description="TeleGene(tm) Regulatory Regions"
+visibility=2`
+chr22  TeleGene enhancer  10000000  10001000  500 +  .  touch1
+chr22  TeleGene promoter  10010000  10010100  900 +  .  touch1
+chr22  TeleGene promoter  10020000  10025000  800 -  .  touch2
+```
+- wig;
+```
+variableStep chrom=chr2
+300701 12.5
+300702 12.5
+300703 12.5
+300704 12.5
+300705 12.5
+```    
+
+## Advantages of R
+
+![NYT](../images/NYTimes_R_Article.png)
+
+The R programming language is now recognised beyond the academic community as an effect solution for data analysis and visualisation. [Notable users of R](http://www.revolutionanalytics.com/companies-using-r) include [Facebook](http://blog.revolutionanalytics.com/2010/12/analysis-of-facebook-status-updates.html), [google](http://blog.revolutionanalytics.com/2009/05/google-using-r-to-analyze-effectiveness-of-tv-ads.html), [Microsoft](http://blog.revolutionanalytics.com/2014/05/microsoft-uses-r-for-xbox-matchmaking.html) (who recently [invested](http://blogs.microsoft.com/blog/2015/01/23/microsoft-acquire-revolution-analytics-help-customers-find-big-data-value-advanced-statistical-analysis/) in a commerical provider of R), and the [New York Times](http://blog.revolutionanalytics.com/2011/03/how-the-new-york-times-uses-r-for-data-visualization.html).
+
+## Key features
+
+- Open-source
+- Cross-platform
+- Access to existing visualisation / statistical tools
+- Flexibility
+- Visualisation and interactivity
+- Add-ons for many fields of research
+- Facilitating ***Reproducible Research***
+
+
+# Crash-course in R
+
+
+
+## Support for R
+
+- Online forums such as [Stack Overflow](http://stackoverflow.com/questions/tagged/r) regularly feature R
+- [Blogs](http://www.r-bloggers.com/)
+- Local [user groups](http://blog.revolutionanalytics.com/local-r-groups.html) 
+- Documentation via `?` or `help.start()`
+
+
+## RStudio
+
+![RStudio](http://www.rstudio.com/wp-content/uploads/2014/03/blue-125.png)
+
+- Rstudio is a free environment for R
+- Convenient menus to access scripts, display plots
+- Still need to use *command-line* to get things done
+- Developed by some of the leading R programmers
+
+## R recap
+
+R can do simple numerical calculations
+```{r}
+2  + 2
+sqrt(25)
+```
+
+Here, `sqrt` is a *function* and the number 25 was used as an *argument* to the function. Functions can have multiple arguments
+
+## Variables
+
+We can save the result of a computation as a *variable* using the *assignment* operator `<-`
+
+```{r}
+x <- sqrt(25)
+x + 5
+y <- x +5
+y
+```
+
+## Vectors
+
+A vector can be used to combine multiple values. The resulting object is indexed and particular values can be queried using the `[]` operator
+
+```{r}
+vec <- c(1,2,3,6)
+vec[1]
+```
+
+## Vectors
+
+Calculations can be performed on vectors
+
+```{r}
+vec*2
+mean(vec)
+sum(vec)
+```
+
+## Data frames
+
+These can be used to represent familiar tabular (row and column) data
+
+```{r}
+df <- data.frame(A = c(1,2,3,6), B = c(7,8,10,12))
+df
+```
+
+## Data frames
+
+Don't need the same data *type* in each column
+
+```{r}
+df <- data.frame(A = c(1,2,3,6), 
+                 B = month.name[c(7,8,10,12)])
+df
+```
+
+##Data frames
+
+We can subset data frames using the `[]`, but can specify row and column indices
+
+```{r}
+df[1,2]
+df[2,1]
+```
+
+##Data frames
+
+```{r}
+df[1,]
+df[,2]
+```
+
+
+Or leave the row or column index blank to get all rows and columns respectively
+
+## Data frames
+
+Another way to access columns is by the `$` operator
+
+- Particularly convenient in conjunction with the tab-complete facility in RStudio
+- Doesn't rely on data being in a particular column number
+
+```{r}
+df$A
+df$B
+```
+
+
+## Plotting
+
+All your favourite types of plot can be created in R
+
+```{r echo=FALSE}
+
+par(mfrow=c(2,2))
+barplot(VADeaths, beside = TRUE,
+        col = c("lightblue", "mistyrose", "lightcyan",
+                "lavender", "cornsilk"), ylim = c(0, 100))
+boxplot(len ~ dose, data = ToothGrowth,
+        boxwex = 0.25, at = 1:3 - 0.2,
+        subset = supp == "VC", col = "yellow",
+        main = "Guinea Pigs' Tooth Growth",
+        xlab = "Vitamin C dose mg",
+        ylab = "tooth length",
+        xlim = c(0.5, 3.5), ylim = c(0, 35), yaxs = "i")
+boxplot(len ~ dose, data = ToothGrowth, add = TRUE,boxwex = 0.25, at = 1:3 + 0.2,subset = supp == "OJ", col = "orange")
+legend(2, 9, c("Ascorbic acid", "Orange juice"),fill = c("yellow", "orange"))
+set.seed(14)
+x <- rchisq(100, df = 4)
+## if you really insist on using hist() ... :
+hist(x, freq = FALSE, ylim = c(0, 0.2))
+curve(dchisq(x, df = 4), col = 2, lty = 2, lwd = 2, add = TRUE)
+pie(c(Sky = 78, "Sunny side of pyramid" = 17, "Shady side of pyramid" = 5),
+    init.angle = 315, col = c("deepskyblue", "yellow", "yellow3"), border = FALSE)
+```
+
+## Plotting
+
+- Simple plots are supported in the *base* distribution of R (what you get automatically when you download R). 
+    + `boxplot`, `hist`, `barplot`,... all of which are extensions of the basic `plot` function
+- Many different customisations are possible
+    + colour, overlay points / text, legends, multi-panel figures
+- We will show how some of these plots can be used to inform us about the quality of NGS data, and to visualise our results.
+- References..
+    + [Introductory R course](http://cambiotraining.github.io/r-intro/)
+    + [Quick-R](http://www.statmethods.net/graphs/index.html)
+
+## The Bioconductor project
+
+![BioC](../images/logo_bioconductor.png)
+
+-  Packages analyse all kinds of Genomic data (>800)
+- Compulsory documentation (*vignettes*) for each package
+- 6-month release cycle
+- [Course Materials](http://bioconductor.org/help/course-materials/)
+- [Example data](http://bioconductor.org/packages/release/BiocViews.html#___ExperimentData) and [workflows](http://bioconductor.org/help/workflows/)
+- Common, re-usable framework and functionality
+- [Available Support](https://support.bioconductor.org/)
+    + Often you will be able to interact with the package maintainers / developers and other power-users of the project software
+- Annual conferences in U.S and Europe
+    - The last European conference was in [Cambridge](https://sites.google.com/site/eurobioc2015/)
+    
+## The Bioconductor project    
+    
+    
+Many of the packages are by well-respected authors and get lots of citations.
+
+![citations](../images/citations.png)
+
+##Downloading a package
+
+Each package has its own landing page. e.g. http://bioconductor.org/packages/release/bioc/html/beadarray.html. Here you'll find;
+
+- Installation script (will install all dependancies)
+- Vignettes and manuals
+- Details of package maintainer
+- After downloading, you can load using the `library` function. e.g. `library(beadarray)`
+- Only need to download once for each version of R
+- CRAN packages installed by `install.packages`
+- What packages to install?
+    + [METACRAN](http://www.r-pkg.org/) can help
+
+
+
+
+## Introducing the practical
+
+- Refresh your memory of R skills
+    + reading data
+    + subsetting data
+    + plotting
+
+
