@@ -36,7 +36,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
   <p class="author">
 Mark Dunning
   </p>
-  <p class="date">Last modified: 26 Nov 2015</p>
+  <p class="date">Last modified: 07 Apr 2016</p>
 </div>
 <div id="overview" class="titleslide slide section level1"><h1>Overview</h1></div><div id="aims" class="slide section level2">
 <h1>Aims</h1>
@@ -546,17 +546,17 @@ myseq &lt;-<span class="st"> </span><span class="kw">DNAStringSet</span>(randomS
 myseq</code></pre>
 <pre><code>##   A DNAStringSet instance of length 100
 ##       width seq
-##   [1]    15 GGAGGCTTTGCCATA
-##   [2]    13 AAAGGGGTAAAGC
-##   [3]    18 AGCCTCTAGGATACAGTT
-##   [4]    12 CAACTACAGAGA
-##   [5]    19 CTAGCCGACATCTATCCAT
+##   [1]    20 CAATGGAGCATGAGACCCTT
+##   [2]    17 CACACTTTGAATCTGGT
+##   [3]    10 TCATGATCCA
+##   [4]    11 AAAATGTAACA
+##   [5]    14 TGCCATCATCGACC
 ##   ...   ... ...
-##  [96]    11 CAAATATGTAC
-##  [97]    15 ATCTTCGAGGACCGT
-##  [98]    19 CACTAGGGAACAGATATCC
-##  [99]    12 GCTAATAGCCGG
-## [100]    18 GTTTTACTAACCGGAGAC</code></pre>
+##  [96]    11 TAGCGTTCATC
+##  [97]    17 CATCACTAAGAATCGCA
+##  [98]    15 GCTTCTCGCCATTCG
+##  [99]    10 GCACAGGGAT
+## [100]    10 GGCCGGGGCC</code></pre>
 </div><div id="object-structure" class="slide section level2">
 <h1>Object structure</h1>
 <ul>
@@ -568,11 +568,11 @@ myseq</code></pre>
 ##   .. .. ..@ xp_list                    :List of 1
 ##   .. .. .. ..$ :&lt;externalptr&gt; 
 ##   .. .. ..@ .link_to_cached_object_list:List of 1
-##   .. .. .. ..$ :&lt;environment: 0x76667c8&gt; 
+##   .. .. .. ..$ :&lt;environment: 0x7435680&gt; 
 ##   ..@ ranges         :Formal class 'GroupedIRanges' [package &quot;XVector&quot;] with 7 slots
 ##   .. .. ..@ group          : int [1:100] 1 1 1 1 1 1 1 1 1 1 ...
-##   .. .. ..@ start          : int [1:100] 1 16 29 47 59 78 91 101 115 134 ...
-##   .. .. ..@ width          : int [1:100] 15 13 18 12 19 13 10 14 19 11 ...
+##   .. .. ..@ start          : int [1:100] 1 21 38 48 59 73 89 108 120 133 ...
+##   .. .. ..@ width          : int [1:100] 20 17 10 11 14 16 19 12 13 13 ...
 ##   .. .. ..@ NAMES          : NULL
 ##   .. .. ..@ elementType    : chr &quot;integer&quot;
 ##   .. .. ..@ elementMetadata: NULL
@@ -588,11 +588,11 @@ myseq</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">myseq[<span class="dv">1</span>:<span class="dv">5</span>]</code></pre>
 <pre><code>##   A DNAStringSet instance of length 5
 ##     width seq
-## [1]    15 GGAGGCTTTGCCATA
-## [2]    13 AAAGGGGTAAAGC
-## [3]    18 AGCCTCTAGGATACAGTT
-## [4]    12 CAACTACAGAGA
-## [5]    19 CTAGCCGACATCTATCCAT</code></pre>
+## [1]    20 CAATGGAGCATGAGACCCTT
+## [2]    17 CACACTTTGAATCTGGT
+## [3]    10 TCATGATCCA
+## [4]    11 AAAATGTAACA
+## [5]    14 TGCCATCATCGACC</code></pre>
 </div><div id="accessor-functions" class="slide section level2">
 <h1>Accessor functions</h1>
 <ul>
@@ -602,29 +602,36 @@ myseq</code></pre>
 </ul></li>
 </ul>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">width</span>(myseq)</code></pre>
-<pre><code>##   [1] 15 13 18 12 19 13 10 14 19 11 15 11 13 16 10 18 15 14 17 18 19 14 10
-##  [24] 13 13 15 13 20 12 12 13 10 12 18 15 15 18 13 18 18 10 12 16 16 16 10
-##  [47] 19 13 18 17 18 20 14 16 19 11 16 12 19 14 17 16 12 13 20 19 16 10 17
-##  [70] 15 13 11 15 14 18 14 19 14 14 12 18 13 20 13 15 11 20 10 13 17 11 12
-##  [93] 17 19 18 11 15 19 12 18</code></pre>
+<pre><code>##   [1] 20 17 10 11 14 16 19 12 13 13 13 16 18 19 19 15 10 10 15 19 11 15 16
+##  [24] 12 17 16 13 14 12 12 16 18 19 15 20 11 18 13 18 20 13 13 20 16 14 19
+##  [47] 16 12 18 15 11 15 18 17 20 16 15 15 19 18 10 20 19 12 15 16 11 15 10
+##  [70] 12 16 17 17 17 14 15 19 11 19 17 14 17 12 17 10 18 14 15 10 12 20 16
+##  [93] 10 20 20 11 17 15 10 10</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">as.character</span>(myseq))</code></pre>
-<pre><code>## [1] &quot;GGAGGCTTTGCCATA&quot;     &quot;AAAGGGGTAAAGC&quot;       &quot;AGCCTCTAGGATACAGTT&quot; 
-## [4] &quot;CAACTACAGAGA&quot;        &quot;CTAGCCGACATCTATCCAT&quot; &quot;TCGAGGGGCGTAT&quot;</code></pre>
+<pre><code>## [1] &quot;CAATGGAGCATGAGACCCTT&quot; &quot;CACACTTTGAATCTGGT&quot;    &quot;TCATGATCCA&quot;          
+## [4] &quot;AAAATGTAACA&quot;          &quot;TGCCATCATCGACC&quot;       &quot;GGGACCAGATAGAATA&quot;</code></pre>
 </div><div id="accessor-functions-1" class="slide section level2">
 <h1>Accessor functions</h1>
 <p>What does this do?</p>
 <pre class="sourceCode r"><code class="sourceCode r">myseq[<span class="kw">width</span>(myseq)&gt;<span class="dv">19</span>]</code></pre>
-<pre><code>##   A DNAStringSet instance of length 5
+<pre><code>##   A DNAStringSet instance of length 9
 ##     width seq
-## [1]    20 ATAGTGCAAAGGGATTTCGC
-## [2]    20 TCGATACGTGCACAATGGGT
-## [3]    20 CAGGCTTTGAAATATAACGA
-## [4]    20 GGTAGGGGAAAGAAAAACGG
-## [5]    20 TCCGATTTAATTGATGGGGG</code></pre>
+## [1]    20 CAATGGAGCATGAGACCCTT
+## [2]    20 TGACCCTATCAAATCACCAT
+## [3]    20 AACCGCTCCAGGAGTTTGCA
+## [4]    20 GATAACCACGGGGGATATGC
+## [5]    20 GGGTCGCGAAAGATTCCCTT
+## [6]    20 CAGCACGCCTCACCCAAATA
+## [7]    20 ATACCTACTTACTACGTCAC
+## [8]    20 TGCAGCTTCTACCCAACGTG
+## [9]    20 TGAAGAATAAGCCGCGATTA</code></pre>
 </div><div id="more-advanced-subsetting" class="slide section level2">
 <h1>More advanced subsetting</h1>
 <pre class="sourceCode r"><code class="sourceCode r">myseq[<span class="kw">subseq</span>(myseq,<span class="dv">1</span>,<span class="dv">3</span>) ==<span class="st"> &quot;TTC&quot;</span>]</code></pre>
-<pre><code>##   A DNAStringSet instance of length 0</code></pre>
+<pre><code>##   A DNAStringSet instance of length 2
+##     width seq
+## [1]    12 TTCTCCCAGCAT
+## [2]    10 TTCGTCATAT</code></pre>
 <p>We can also use the <code>matchPattern</code> function + see practical for details</p>
 </div><div id="other-useful-operations" class="slide section level2">
 <h1>Other useful operations</h1>
@@ -632,64 +639,65 @@ myseq</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">af &lt;-<span class="st"> </span><span class="kw">alphabetFrequency</span>(myseq, <span class="dt">baseOnly=</span><span class="ot">TRUE</span>)
 <span class="kw">head</span>(af)</code></pre>
 <pre><code>##      A C G T other
-## [1,] 3 3 5 4     0
-## [2,] 6 1 5 1     0
-## [3,] 5 4 4 5     0
-## [4,] 6 3 2 1     0
-## [5,] 5 7 2 5     0
-## [6,] 2 2 6 3     0</code></pre>
+## [1,] 6 5 5 4     0
+## [2,] 4 4 3 6     0
+## [3,] 3 3 1 3     0
+## [4,] 7 1 1 2     0
+## [5,] 3 6 2 3     0
+## [6,] 7 2 5 2     0</code></pre>
 </div><div id="letter-frequencies" class="slide section level2">
 <h1>Letter frequencies</h1>
 <pre class="sourceCode r"><code class="sourceCode r">myseq[af[,<span class="dv">1</span>] ==<span class="dv">0</span>,]</code></pre>
-<pre><code>##   A DNAStringSet instance of length 1
+<pre><code>##   A DNAStringSet instance of length 2
 ##     width seq
-## [1]    10 TTGCGCGCGC</code></pre>
+## [1]    14 GCCTTCTGTCTCCC
+## [2]    10 GGCCGGGGCC</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(af)</code></pre>
-<p><img src="data:image/png;base64,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" title alt width="768" /></p>
+<p><img src="data:image/png;base64,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QFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJCUAAAkJQAASQkAQFICAJDU/wehG12qho/wIgAAAABJRU5ErkJggg==" title alt width="768" /></p>
 </div><div id="more-specialised-features" class="slide section level2">
 <h1>More-specialised features</h1>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">reverse</span>(myseq)</code></pre>
 <pre><code>##   A DNAStringSet instance of length 100
 ##       width seq
-##   [1]    15 ATACCGTTTCGGAGG
-##   [2]    13 CGAAATGGGGAAA
-##   [3]    18 TTGACATAGGATCTCCGA
-##   [4]    12 AGAGACATCAAC
-##   [5]    19 TACCTATCTACAGCCGATC
+##   [1]    20 TTCCCAGAGTACGAGGTAAC
+##   [2]    17 TGGTCTAAGTTTCACAC
+##   [3]    10 ACCTAGTACT
+##   [4]    11 ACAATGTAAAA
+##   [5]    14 CCAGCTACTACCGT
 ##   ...   ... ...
-##  [96]    11 CATGTATAAAC
-##  [97]    15 TGCCAGGAGCTTCTA
-##  [98]    19 CCTATAGACAAGGGATCAC
-##  [99]    12 GGCCGATAATCG
-## [100]    18 CAGAGGCCAATCATTTTG</code></pre>
+##  [96]    11 CTACTTGCGAT
+##  [97]    17 ACGCTAAGAATCACTAC
+##  [98]    15 GCTTACCGCTCTTCG
+##  [99]    10 TAGGGACACG
+## [100]    10 CCGGGGCCGG</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">reverseComplement</span>(myseq)</code></pre>
 <pre><code>##   A DNAStringSet instance of length 100
 ##       width seq
-##   [1]    15 TATGGCAAAGCCTCC
-##   [2]    13 GCTTTACCCCTTT
-##   [3]    18 AACTGTATCCTAGAGGCT
-##   [4]    12 TCTCTGTAGTTG
-##   [5]    19 ATGGATAGATGTCGGCTAG
+##   [1]    20 AAGGGTCTCATGCTCCATTG
+##   [2]    17 ACCAGATTCAAAGTGTG
+##   [3]    10 TGGATCATGA
+##   [4]    11 TGTTACATTTT
+##   [5]    14 GGTCGATGATGGCA
 ##   ...   ... ...
-##  [96]    11 GTACATATTTG
-##  [97]    15 ACGGTCCTCGAAGAT
-##  [98]    19 GGATATCTGTTCCCTAGTG
-##  [99]    12 CCGGCTATTAGC
-## [100]    18 GTCTCCGGTTAGTAAAAC</code></pre>
+##  [96]    11 GATGAACGCTA
+##  [97]    17 TGCGATTCTTAGTGATG
+##  [98]    15 CGAATGGCGAGAAGC
+##  [99]    10 ATCCCTGTGC
+## [100]    10 GGCCCCGGCC</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">translate</span>(myseq)</code></pre>
 <pre><code>##   A AAStringSet instance of length 100
 ##       width seq
-##   [1]     5 GGFAI
-##   [2]     4 KGVK
-##   [3]     6 SL*DTV
-##   [4]     4 QLQR
-##   [5]     6 LADIYP
+##   [1]     6 QWSMRP
+##   [2]     5 HTLNL
+##   [3]     3 S*S
+##   [4]     3 KM*
+##   [5]     4 CHHR
 ##   ...   ... ...
-##  [96]     3 QIC
-##  [97]     5 IFEDR
-##  [98]     6 H*GTDI
-##  [99]     4 ANSR
-## [100]     6 VLLTGD</code></pre>
+##  [96]     3 *RS
+##  [97]     5 HH*ES
+##  [98]     5 ASRHS
+##  [99]     3 AQG
+## [100]     3 GRG</code></pre>
 </div><div id="fastq-recap" class="slide section level2">
 <h1>Fastq recap</h1>
 <p>Recall that sequence reads are represented in text format</p>
@@ -802,7 +810,7 @@ tp53</code></pre>
 <p>Don’t need to load the whole genome into memory, so reading a particular sequence is <strong><em>fast</em></strong></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(tp53 &lt;-<span class="st"> </span><span class="kw">getSeq</span>(hg19, <span class="st">&quot;chr17&quot;</span>, <span class="dv">7577851</span>, <span class="dv">7598063</span>))</code></pre>
 <pre><code>##    user  system elapsed 
-##    0.12    0.00    0.12</code></pre>
+##   0.119   0.000   0.121</code></pre>
 </div><div id="manipulating-sequences" class="slide section level2">
 <h1>Manipulating sequences</h1>
 <p>We can now use <code>Biostrings</code> operations to manipulate the sequence</p>
@@ -854,25 +862,25 @@ gr</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mcols</span>(gr) &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Count =</span> <span class="kw">runif</span>(<span class="kw">length</span>(gr)), <span class="dt">Gene =</span><span class="kw">sample</span>(LETTERS,<span class="kw">length</span>(gr)))
 gr</code></pre>
 <pre><code>## GRanges object with 7 ranges and 2 metadata columns:
-##     seqnames    ranges strand |      Count     Gene
-##        &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; |  &lt;numeric&gt; &lt;factor&gt;
-##   A        A  [ 7, 15]      * | 0.81232193        N
-##   B        A  [ 9, 11]      * | 0.02486662        X
-##   C        A  [12, 13]      * | 0.42963184        V
-##   D        B  [14, 18]      * | 0.56076234        Q
-##   E        B  [22, 26]      * | 0.54867238        T
-##   F        B  [23, 27]      * | 0.52425059        P
-##   G        B  [24, 28]      * | 0.18383772        I
+##     seqnames    ranges strand |     Count     Gene
+##        &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt; &lt;factor&gt;
+##   A        A  [ 7, 15]      * | 0.7381355        M
+##   B        A  [ 9, 11]      * | 0.6478283        O
+##   C        A  [12, 13]      * | 0.7565513        L
+##   D        B  [14, 18]      * | 0.2189535        P
+##   E        B  [22, 26]      * | 0.6419020        R
+##   F        B  [23, 27]      * | 0.3488164        S
+##   G        B  [24, 28]      * | 0.1284477        Q
 ##   -------
 ##   seqinfo: 2 sequences from an unspecified genome; no seqlengths</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">gr[<span class="kw">mcols</span>(gr)$Count &gt;<span class="st"> </span><span class="fl">0.5</span>]</code></pre>
 <pre><code>## GRanges object with 4 ranges and 2 metadata columns:
 ##     seqnames    ranges strand |     Count     Gene
 ##        &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt; &lt;factor&gt;
-##   A        A  [ 7, 15]      * | 0.8123219        N
-##   D        B  [14, 18]      * | 0.5607623        Q
-##   E        B  [22, 26]      * | 0.5486724        T
-##   F        B  [23, 27]      * | 0.5242506        P
+##   A        A  [ 7, 15]      * | 0.7381355        M
+##   B        A  [ 9, 11]      * | 0.6478283        O
+##   C        A  [12, 13]      * | 0.7565513        L
+##   E        B  [22, 26]      * | 0.6419020        R
 ##   -------
 ##   seqinfo: 2 sequences from an unspecified genome; no seqlengths</code></pre>
 </div><div id="representing-a-gene" class="slide section level2">
@@ -1006,18 +1014,18 @@ bam &lt;-<span class="st"> </span><span class="kw">readGAlignments</span>(mybam,
 <pre><code>## GAlignments object with 5 alignments and 0 metadata columns:
 ##                     seqnames strand       cigar    qwidth
 ##                        &lt;Rle&gt;  &lt;Rle&gt; &lt;character&gt; &lt;integer&gt;
-##    SRR031715.466641     chr4      +         37M        37
-##   SRR031715.1469604     chr4      -         37M        37
-##    SRR031715.841807     chr4      -         37M        37
-##   SRR031714.1793764     chr4      +         37M        37
-##    SRR031714.296688     chr4      -         37M        37
+##   SRR031715.2811753     chr4      -         37M        37
+##     SRR031714.81365     chr4      +         37M        37
+##   SRR031714.4803523     chr4      +   23M64N14M        37
+##   SRR031715.3050485     chr4      +         37M        37
+##   SRR031714.4998522     chr4      -         37M        37
 ##                         start       end     width     njunc
 ##                     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
-##    SRR031715.466641    481456    481492        37         0
-##   SRR031715.1469604    947196    947232        37         0
-##    SRR031715.841807    947233    947269        37         0
-##   SRR031714.1793764    939651    939687        37         0
-##    SRR031714.296688    371542    371578        37         0
+##   SRR031715.2811753     87786     87822        37         0
+##     SRR031714.81365    347242    347278        37         0
+##   SRR031714.4803523    375570    375670       101         1
+##   SRR031715.3050485    939529    939565        37         0
+##   SRR031714.4998522    482906    482942        37         0
 ##   -------
 ##   seqinfo: 8 sequences from an unspecified genome</code></pre>
 </div><div id="querying-alignments" class="slide section level2">
@@ -1129,16 +1137,17 @@ gr</code></pre>
 ##   -------
 ##   queryLength: 1
 ##   subjectLength: 175346</code></pre>
-</div><div id="solution" class="slide section level2">
-<h1>Solution</h1>
-<pre class="sourceCode r"><code class="sourceCode r">gr</code></pre>
+</div><div id="solutions" class="slide section level2">
+<h1>Solution(s)</h1>
+<pre class="sourceCode r"><code class="sourceCode r">gr &lt;-<span class="st"> </span><span class="kw">renameSeqlevels</span>(gr, <span class="kw">c</span>(<span class="st">&quot;4&quot;</span>=<span class="st">&quot;chr4&quot;</span>))
+gr</code></pre>
 <pre><code>## GRanges object with 1 range and 0 metadata columns:
 ##       seqnames         ranges strand
 ##          &lt;Rle&gt;      &lt;IRanges&gt;  &lt;Rle&gt;
-##   [1]        4 [20000, 20100]      *
+##   [1]     chr4 [20000, 20100]      *
 ##   -------
 ##   seqinfo: 1 sequence from an unspecified genome; no seqlengths</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">gr &lt;-<span class="st"> </span><span class="kw">renameSeqlevels</span>(gr, <span class="kw">c</span>(<span class="st">&quot;4&quot;</span>=<span class="st">&quot;chr4&quot;</span>))
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">seqlevelsStyle</span>(gr) &lt;-<span class="st"> &quot;UCSC&quot;</span>
 gr</code></pre>
 <pre><code>## GRanges object with 1 range and 0 metadata columns:
 ##       seqnames         ranges strand
@@ -1198,13 +1207,13 @@ bam.extra[<span class="dv">1</span>:<span class="dv">5</span>]</code></pre>
 nodupReads &lt;-<span class="st"> </span><span class="kw">readGAlignments</span>(<span class="dt">file=</span>mybam,<span class="dt">param=</span><span class="kw">ScanBamParam</span>(<span class="kw">scanBamFlag</span>(<span class="dt">isDuplicate =</span> <span class="ot">FALSE</span>)))
 allreads &lt;-<span class="st"> </span><span class="kw">readGAlignments</span>(<span class="dt">file=</span>mybam,<span class="dt">param=</span><span class="kw">ScanBamParam</span>(<span class="kw">scanBamFlag</span>(<span class="dt">isDuplicate =</span> <span class="ot">NA</span>)))
 <span class="kw">length</span>(dupReads)</code></pre>
-<pre><code>## [1] 0</code></pre>
+<pre><code>## [1] 106279</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(nodupReads)</code></pre>
-<pre><code>## [1] 175346</code></pre>
+<pre><code>## [1] 1427612</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(allreads)</code></pre>
-<pre><code>## [1] 175346</code></pre>
+<pre><code>## [1] 1533891</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(allreads) -<span class="st"> </span><span class="kw">length</span>(dupReads)</code></pre>
-<pre><code>## [1] 175346</code></pre>
+<pre><code>## [1] 1427612</code></pre>
 </div><div id="reading-a-particular-region" class="slide section level2">
 <h1>Reading a particular region</h1>
 <ul>
