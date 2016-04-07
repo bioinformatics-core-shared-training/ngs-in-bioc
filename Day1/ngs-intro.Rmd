@@ -367,15 +367,48 @@ $ samtools flagstat NA19914.chr22.bam
 
 ```
 
+## Aligned files in IGV
+
+- Once our bam files have been *indexed* we can view them in IGV
+- This is **highly recommended**
+- Check-out [our colleagues' course](http://mrccsc.github.io/IGV_course/) for more details
+
+![igv](../images/igv_screenshot1.png)
+
+
+
+
+
+
 ## Post-processing of aligned files
 
 - Marking of PCR duplicates
     + PCR amplification errors can cause some sequences to be over-represented
     + Chances of any two sequences aligning to the same position are *unlikely*
     + Caveat: obviously this depends on amount of the genome you are capturing
+
+```{r echo=FALSE,cache=TRUE}
+suppressPackageStartupMessages(library(GenomicAlignments))
+mybam <- "HG00096.chr22.bam"
+dupReads <- readGAlignments(file=mybam,param=ScanBamParam(scanBamFlag(isDuplicate = TRUE)))
+nodupReads <- readGAlignments(file=mybam,param=ScanBamParam(scanBamFlag(isDuplicate = FALSE)))
+suppressPackageStartupMessages(library(ggbio))
+gr1 <- GRanges("22",IRanges(16448767,16448866))
+gr1 <- flank(gr1, 10,both=TRUE)
+dupReads <- dupReads[dupReads %over% gr1]
+pcrDuplicate <- start(dupReads)==16448767 & end(dupReads) == 16448866
+mcols(dupReads)$pcrDuplicate <- pcrDuplicate
+autoplot(dupReads,aes(fill=pcrDuplicate)) + scale_fill_manual(values = c("black","red"))
+```
+
+    
+## Post-processing of aligned files
+
+- PCR duplicates
     + Such reads are *marked* but not usually removed from the data
     + Most downstream methods will ignore such reads
     + Typically, [***picard***](http://broadinstitute.github.io/picard/) is used 
+    
 - Sorting
     + Reads can be sorted according to genomic position
         + [***samtools***](http://www.htslib.org/)
@@ -384,13 +417,6 @@ $ samtools flagstat NA19914.chr22.bam
         + [***samtools***](http://www.htslib.org/)
 
 
-
-## Aligned files in IGV
-
-- Once our bam files have been *indexed* we can view them in IGV
-- This is **highly recommended**
-
-![igv](../images/igv_screenshot1.png)
 
 
 ## Other misc. format
