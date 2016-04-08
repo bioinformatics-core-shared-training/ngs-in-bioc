@@ -254,7 +254,8 @@ GATTTGGGGTTCAAAGCAGTATCGATCAAATAGTAAATCCATTTGTTCAACTCACAGTTT
     + Q = 20, p=0.01
     + Q = 10, p=0.1
 - These numeric quanties are *encoded* as **ASCII** code
-    + Sometimes an offset is used before encoding
+    + An offset needs to be used before encoding
+    + At least 33 to get to meaningful characters
 
 ## Fastq quality scores
 
@@ -276,6 +277,9 @@ GATTTGGGGTTCAAAGCAGTATCGATCAAATAGTAAATCCATTTGTTCAACTCACAGTTT
 - **S**equence **A**lignment/**M**ap (sam) http://samtools.github.io/hts-specs/SAMv1.pdf
 - *Header* lines followed by tab-delimited lines
     + Header gives information about the alignment and references sequences used
+- Same format regardless of sequencing protocol (i.e. RNA-seq, ChIP-seq, DNA-seq etc)
+- May contain un-mapped reads
+
 ```
 @HD     VN:1.0  SO:coordinate
 @SQ     SN:chr1 LN:249250621
@@ -325,25 +329,27 @@ CC:Z:chr15      CP:i:102518319  XS:A:+  HI:i:0
     + Read is unmapped
     + Read is paired / unpaired
     + Read failed QC
-    + Read is a PCR duplicate 
+    + Read is a PCR duplicate (see later)
+
+
+
+## Derivation
+
+```{r echo=FALSE,cache=TRUE}
+suppressPackageStartupMessages(library(GenomicAlignments))
+mybam <- "HG00096.chr22.bam"
+bam.extra <- readGAlignments(file=mybam,param=ScanBamParam(what=c("flag")))
+flags <- mcols(bam.extra)$flag
+flagMat <- bamFlagAsBitMatrix(flags)
+df <- data.frame(ReadHasProperty = as.logical(flagMat[1,]),Binary=flagMat[1,] ,MultiplyBy=2^(0:10))
+knitr::kable(df)
+```
+
+Value of flag is given by `r paste(df$Binary,df$MultiplyBy,sep="x",collapse=" + ")` = `r sum(df$Binary * t(df$MultiplyBy))`
+
+See also
+
 - https://broadinstitute.github.io/picard/explain-flags.html
-
-![sam-flags](../images/sam-flags.png)
-
-## Aligned reads - bam
-
-- *Exactly* the same information as a sam file
-- ..except that it is *binary* version of sam
-- compressed around x4
-- Attempting to read will print garbage to the screen
-- bam files can be indexed
-    + Produces an index file with the same name as the bam file, but with **.bai** extension
-
-```
-samtools view mysequences.bam | head
-```
-
-- N.B The sequences can be extracted by various tools to give *fastq*
 
 ## samtools flagstat
 
@@ -367,15 +373,20 @@ $ samtools flagstat NA19914.chr22.bam
 
 ```
 
-## Aligned files in IGV
+## Aligned reads - bam
 
-- Once our bam files have been *indexed* we can view them in IGV
-- This is **highly recommended**
-- Check-out [our colleagues' course](http://mrccsc.github.io/IGV_course/) for more details
+- *Exactly* the same information as a sam file
+- ..except that it is *binary* version of sam
+- compressed around x4
+- Attempting to read will print garbage to the screen
+- bam files can be indexed
+    + Produces an index file with the same name as the bam file, but with **.bai** extension
 
-![igv](../images/igv_screenshot1.png)
+```
+samtools view mysequences.bam | head
+```
 
-
+- N.B The sequences can be extracted by various tools to give *fastq*
 
 
 
@@ -416,6 +427,17 @@ autoplot(dupReads,aes(fill=pcrDuplicate)) + scale_fill_manual(values = c("black"
     + Allow efficient access
         + [***samtools***](http://www.htslib.org/)
 
+## Aligned files in IGV
+
+- Once our bam files have been *indexed* we can view them in IGV
+- This is **highly recommended**
+- Check-out [our colleagues' course](http://mrccsc.github.io/IGV_course/) for more details
+
+![igv](../images/igv_screenshot1.png)
+
+
+
+
 
 
 
@@ -448,6 +470,8 @@ variableStep chrom=chr2
 300705 12.5
 ```    
 
+# Crash-course in R
+
 ## Advantages of R
 
 ![NYT](../images/NYTimes_R_Article.png)
@@ -465,7 +489,7 @@ The R programming language is now recognised beyond the academic community as an
 - Facilitating ***Reproducible Research***
 
 
-# Crash-course in R
+
 
 
 
